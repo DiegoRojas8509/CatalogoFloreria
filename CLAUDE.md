@@ -43,7 +43,7 @@ npm install            # instalar dependencias (primera vez)
 npm run dev            # sitio público en http://localhost:3000
 npm run studio         # panel de administración en http://localhost:3333
 npm run build          # genera el sitio estático en ./out  (para publicar)
-npm run studio:deploy  # publica el panel en https://un-jardin.sanity.studio
+npm run studio:deploy  # publica el panel en https://un-jardin-original.sanity.studio
 npm run seed           # carga 9 arreglos de ejemplo en Sanity (requiere token)
 ```
 
@@ -104,7 +104,7 @@ un-jardin/
 ├─ tailwind.config.ts       # ⭐ paleta de marca, fuentes, animaciones
 ├─ tsconfig.json            # alias "@/*" → "src/*"
 ├─ sanity.config.ts         # configuración del Studio (panel admin)
-├─ sanity.cli.ts            # studioHost: "un-jardin" (subdominio .sanity.studio)
+├─ sanity.cli.ts            # studioHost: "un-jardin-original" (subdominio .sanity.studio)
 ├─ .env.local.example       # plantilla de variables de entorno
 ├─ README.md                # guía paso a paso (instalar, conectar, publicar)
 │
@@ -231,7 +231,10 @@ solo lectura del dataset público). El `SANITY_WRITE_TOKEN` es secreto.
 - Framework preset: Next.js (Static HTML Export)
 - Variables: `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`
 
-**Panel (Sanity Studio):** `npm run studio:deploy` → `https://un-jardin.sanity.studio`.
+**Panel (Sanity Studio):** `npm run studio:deploy` → `https://un-jardin-original.sanity.studio`.
+
+> **Nota:** el `projectId` de Sanity está hardcodeado en `sanity.config.ts` (`donxsfze`)
+> porque el Studio desplegado no tiene acceso a `.env.local`. Es seguro: es un ID público de solo lectura.
 
 ---
 
@@ -273,13 +276,17 @@ solo lectura del dataset público). El `SANITY_WRITE_TOKEN` es secreto.
 
 ---
 
-## 12. Estado actual
+## 12. Estado actual (mayo 2026)
 
-- Proyecto verificado: `npx tsc --noEmit` pasa y `npm run build` exporta a
-  `./out` sin errores (con internet para las fuentes).
-- Los arreglos de ejemplo no traen foto → se muestran con `Placeholder`
-  (marcador de marca). Al subir fotos reales desde el panel, se reemplazan.
-- Datos de marca ya cargados en `config.ts`: WhatsApp `524771407875`
-  (477 140 7875), dirección en Jardines del Moral, Instagram `@unjardin__`.
-- Pendientes típicos: conectar el proyecto Sanity real, subir fotos reales,
-  publicar en Cloudflare y (opcional) dominio propio.
+- **Sanity conectado**: Project ID `donxsfze`, dataset `production`. Fotos y
+  arreglos reales ya cargados desde el panel.
+- **Sitio en producción**: `https://unjardin-pao.pages.dev` (Cloudflare Pages).
+  La rama `main-unjardin` es la rama de producción; hacer push ahí dispara el deploy.
+- **Studio publicado**: `https://un-jardin-original.sanity.studio`.
+- **Grid del catálogo** (`Catalog.tsx`) usa `buildGridConfig()` que adapta columnas
+  según cantidad de cards e `isMobile` (detectado en cliente con resize listener):
+  - Pocas cards → grid regular que llena el espacio sin huecos
+  - Muchas cards (>4 móvil / >8 desktop) → 2 filas + scroll horizontal
+- **Hero** usa `bg-cream` para diferenciarse visualmente de la sección Destacados
+  que usa `.paper` (`bg-cream-light`).
+- `npx tsc --noEmit` y `npm run build` pasan sin errores.
