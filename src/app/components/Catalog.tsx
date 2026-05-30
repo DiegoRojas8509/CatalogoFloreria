@@ -36,7 +36,7 @@ export default function Catalog() {
   }, []);
 
   const featured = useMemo(
-    () => arrangements.filter((a) => a.isFeatured).slice(0, 3),
+    () => arrangements.filter((a) => a.isFeatured),
     [arrangements]
   );
 
@@ -87,11 +87,14 @@ export default function Catalog() {
                 Arreglos destacados
               </h2>
             </Reveal>
-            <div className="mt-12 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
-              {featured.map((a, i) => (
-                <Reveal key={a._id} delay={i * 90}>
+            <div className="mt-12 flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {featured.map((a) => (
+                <div
+                  key={a._id}
+                  className="w-[calc(25%-0.9375rem)] min-w-[220px] shrink-0 snap-start"
+                >
                   <ArrangementCard arrangement={a} onOpen={openArrangement} />
-                </Reveal>
+                </div>
               ))}
             </div>
           </div>
@@ -159,11 +162,14 @@ export default function Catalog() {
                 No encontramos arreglos con esa búsqueda. Intenta con otra palabra.
               </p>
             ) : (
-              <div className="grid grid-cols-2 gap-5 sm:gap-7 lg:grid-cols-3">
+              <div
+                className="grid grid-rows-2 grid-flow-col gap-5 overflow-x-auto pb-4 snap-x snap-mandatory [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                style={{ gridAutoColumns: "calc(50% - 0.625rem)" }}
+              >
                 {filtered.map((a, i) => (
-                  <Reveal key={a._id} delay={isBrowsing ? 0 : Math.min(i * 60, 360)}>
+                  <div key={a._id} className="snap-start">
                     <ArrangementCard arrangement={a} onOpen={openArrangement} />
-                  </Reveal>
+                  </div>
                 ))}
               </div>
             )}
@@ -201,10 +207,13 @@ function FilterPill({
 
 function SkeletonGrid() {
   return (
-    <div className="grid grid-cols-2 gap-5 sm:gap-7 lg:grid-cols-3">
-      {Array.from({ length: 6 }).map((_, i) => (
+    <div
+      className="grid grid-rows-2 grid-flow-col gap-5 overflow-hidden"
+      style={{ gridAutoColumns: "calc(50% - 0.625rem)" }}
+    >
+      {Array.from({ length: 4 }).map((_, i) => (
         <div key={i} className="animate-pulse">
-          <div className="aspect-[4/5] w-full rounded-xl2 bg-cream-deep" />
+          <div className="aspect-[4/5] w-full rounded-xl bg-cream-deep" />
           <div className="mt-3 h-4 w-2/3 rounded bg-cream-deep" />
           <div className="mt-2 h-3 w-1/3 rounded bg-cream-deep" />
         </div>
