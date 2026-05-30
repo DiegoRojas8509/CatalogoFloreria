@@ -163,8 +163,7 @@ export default function Catalog() {
               </p>
             ) : (
               <div
-                className="grid grid-rows-2 grid-flow-col gap-5 overflow-x-auto pb-4 snap-x snap-mandatory [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-                style={{ gridAutoColumns: "calc(50% - 0.625rem)" }}
+                className="catalog-grid grid grid-rows-2 grid-flow-col gap-5 overflow-x-auto pb-4 snap-x snap-mandatory [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
               >
                 {filtered.map((a, i) => (
                   <div key={a._id} className="snap-start">
@@ -208,8 +207,7 @@ function FilterPill({
 function SkeletonGrid() {
   return (
     <div
-      className="grid grid-rows-2 grid-flow-col gap-5 overflow-hidden"
-      style={{ gridAutoColumns: "calc(50% - 0.625rem)" }}
+      className="catalog-grid grid grid-rows-2 grid-flow-col gap-5 overflow-hidden"
     >
       {Array.from({ length: 4 }).map((_, i) => (
         <div key={i} className="animate-pulse">
