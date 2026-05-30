@@ -3,7 +3,7 @@ import { whatsappLink } from "@/lib/whatsapp";
 
 export default function Hero() {
   return (
-    <section id="top" className="paper relative overflow-hidden">
+    <section id="top" className="relative overflow-hidden bg-cream">
       <div className="mx-auto max-w-5xl px-5 pb-24 pt-20 text-center sm:px-8 sm:pb-32 sm:pt-28">
         <p className="eyebrow text-sage-dark animate-fade-in" style={{ animationDelay: "0.05s" }}>
           Florería · {site.city}
