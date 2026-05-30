@@ -7,6 +7,43 @@ import ArrangementCard from "./ArrangementCard";
 import ArrangementModal from "./ArrangementModal";
 import Reveal from "./Reveal";
 
+type GridConfig = {
+  className: string;
+  style: React.CSSProperties;
+  itemClass: string;
+};
+
+function buildGridConfig(count: number, isMobile: boolean): GridConfig {
+  const maxCols = isMobile ? 2 : 4;
+  const maxVisible = maxCols * 2; // 2 filas máximo antes de scroll
+  const GAP = 1.25; // gap-5 en rem
+
+  if (count > maxVisible) {
+    // Scroll horizontal: columnas fijas de tamaño exacto
+    const autoColWidth = `calc(${100 / maxCols}% - ${(GAP * (maxCols - 1)) / maxCols}rem)`;
+    return {
+      className:
+        "grid grid-rows-2 grid-flow-col gap-5 overflow-x-auto pb-4 snap-x snap-mandatory [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+      style: { gridAutoColumns: autoColWidth },
+      itemClass: "snap-start",
+    };
+  }
+
+  // Sin scroll: columnas calculadas para llenar el espacio sin huecos grandes
+  let cols: number;
+  if (count <= maxCols) {
+    cols = count; // fila única, tantas columnas como items
+  } else {
+    cols = Math.ceil(count / 2); // distribuye en 2 filas
+  }
+
+  return {
+    className: "grid gap-5",
+    style: { gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` },
+    itemClass: "",
+  };
+}
+
 export default function Catalog() {
   const [arrangements, setArrangements] = useState<Arrangement[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -14,6 +51,14 @@ export default function Catalog() {
   const [query, setQuery] = useState("");
   const [activeCat, setActiveCat] = useState<string>("todos");
   const [selected, setSelected] = useState<Arrangement | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -161,17 +206,18 @@ export default function Catalog() {
               <p className="py-16 text-center text-olive/50">
                 No encontramos arreglos con esa búsqueda. Intenta con otra palabra.
               </p>
-            ) : (
-              <div
-                className="catalog-grid grid grid-rows-2 grid-flow-col gap-5 overflow-x-auto pb-4 snap-x snap-mandatory [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-              >
-                {filtered.map((a, i) => (
-                  <div key={a._id} className="snap-start">
-                    <ArrangementCard arrangement={a} onOpen={openArrangement} />
+            ) : (() => {
+                const cfg = buildGridConfig(filtered.length, isMobile);
+                return (
+                  <div className={cfg.className} style={cfg.style}>
+                    {filtered.map((a) => (
+                      <div key={a._id} className={cfg.itemClass}>
+                        <ArrangementCard arrangement={a} onOpen={openArrangement} />
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            )}
+                );
+              })()}
           </div>
         </div>
       </section>
@@ -206,9 +252,7 @@ function FilterPill({
 
 function SkeletonGrid() {
   return (
-    <div
-      className="catalog-grid grid grid-rows-2 grid-flow-col gap-5 overflow-hidden"
-    >
+    <div className="grid grid-cols-2 gap-5 sm:grid-cols-4">
       {Array.from({ length: 4 }).map((_, i) => (
         <div key={i} className="animate-pulse">
           <div className="aspect-[4/5] w-full rounded-xl bg-cream-deep" />

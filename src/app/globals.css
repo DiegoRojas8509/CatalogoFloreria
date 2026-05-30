@@ -49,16 +49,6 @@
   }
 }
 
-/* Grid del catálogo: 2 cols en móvil, 4 cols en desktop */
-.catalog-grid {
-  grid-auto-columns: calc(50% - 0.625rem);
-}
-@media (min-width: 640px) {
-  .catalog-grid {
-    grid-auto-columns: calc(25% - 0.9375rem);
-  }
-}
-
 /* Aparición al hacer scroll */
 .reveal {
   opacity: 0;
