@@ -6,8 +6,13 @@ export default function Footer() {
     <footer className="bg-olive-dark px-5 py-12 text-cream/70 sm:px-8">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 text-center sm:flex-row sm:justify-between sm:text-left">
         <div>
-          <p className="font-display text-2xl text-cream-light">{site.name}</p>
-          <p className="eyebrow mt-1 text-[0.58rem] text-sage-light">Florería · {site.city}</p>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logo.png"
+            alt={site.name}
+            className="h-10 w-auto object-contain brightness-0 invert"
+          />
+          <p className="eyebrow mt-2 text-[0.58rem] text-sage-light">Florería · {site.city}</p>
         </div>
         <div className="flex items-center gap-6 text-sm">
           <a href={site.instagram} target="_blank" rel="noopener noreferrer" className="transition hover:text-cream-light">

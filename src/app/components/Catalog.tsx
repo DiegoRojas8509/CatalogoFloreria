@@ -1,48 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useRef, useMemo, useState, useCallback } from "react";
 import type { Arrangement, Category } from "@/lib/types";
 import { getArrangements, getCategories } from "@/lib/data";
 import ArrangementCard from "./ArrangementCard";
 import ArrangementModal from "./ArrangementModal";
 import GSAPScrollTitle from "./GSAPScrollTitle";
 
-type GridConfig = {
-  className: string;
-  style: React.CSSProperties;
-  itemClass: string;
-};
-
-function buildGridConfig(count: number, isMobile: boolean): GridConfig {
-  const maxCols = isMobile ? 2 : 4;
-  const maxVisible = maxCols * 2; // 2 filas máximo antes de scroll
-  const GAP = 1.25; // gap-5 en rem
-
-  if (count > maxVisible) {
-    // Scroll horizontal: columnas fijas de tamaño exacto
-    const autoColWidth = `calc(${100 / maxCols}% - ${(GAP * (maxCols - 1)) / maxCols}rem)`;
-    return {
-      className:
-        "grid grid-rows-2 grid-flow-col gap-5 overflow-x-auto pb-4 snap-x snap-mandatory [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
-      style: { gridAutoColumns: autoColWidth },
-      itemClass: "snap-start",
-    };
-  }
-
-  // Sin scroll: columnas calculadas para llenar el espacio sin huecos grandes
-  let cols: number;
-  if (count <= maxCols) {
-    cols = count; // fila única, tantas columnas como items
-  } else {
-    cols = Math.ceil(count / 2); // distribuye en 2 filas
-  }
-
-  return {
-    className: "grid gap-5",
-    style: { gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` },
-    itemClass: "",
-  };
-}
 
 export default function Catalog() {
   const [arrangements, setArrangements] = useState<Arrangement[]>([]);
@@ -51,14 +15,6 @@ export default function Catalog() {
   const [query, setQuery] = useState("");
   const [activeCat, setActiveCat] = useState<string>("todos");
   const [selected, setSelected] = useState<Arrangement | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 640);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
 
   useEffect(() => {
     let active = true;
@@ -124,21 +80,50 @@ export default function Catalog() {
     <>
       {/* Destacados */}
       {!loading && featured.length > 0 && (
-        <section id="destacados" className="bg-cream-light px-5 py-20 sm:px-8 sm:py-28">
-          <div className="mx-auto max-w-6xl">
-            <GSAPScrollTitle label="— Selección de la casa">
-              Destacados
-            </GSAPScrollTitle>
-            <div className="mt-12 flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              {featured.map((a, idx) => (
+        <section id="destacados" className="bg-cream-light py-20 sm:py-28">
+          <div className="mx-auto max-w-6xl sm:px-8">
+
+            {/* ── MOBILE ── título + scroll horizontal 2 filas con peek */}
+            <div className="sm:hidden">
+              <div className="px-5">
+                <p className="dash-label text-olive">— Selección de la casa</p>
+                <h2 className="mt-4 font-display text-5xl text-olive">Destacados</h2>
+              </div>
+              <div className="mt-8 overflow-x-auto snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 <div
-                  key={a._id}
-                  className="w-[calc(25%-0.9375rem)] min-w-[220px] shrink-0 snap-start"
+                  className="grid grid-rows-2 grid-flow-col gap-4 pl-5 pr-10"
+                  style={{ gridAutoColumns: "calc(50vw - 28px)" }}
                 >
-                  <ArrangementCard arrangement={a} onOpen={openArrangement} index={idx} />
+                  {featured.map((a, idx) => (
+                    <div key={a._id} className="snap-start">
+                      <ArrangementCard arrangement={a} onOpen={openArrangement} index={idx} showFeaturedBadge={false} />
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
+
+            {/* ── DESKTOP ── título vertical sticky + grid con scroll */}
+            <div className="hidden sm:flex sm:items-start sm:gap-10">
+              <div className="flex shrink-0 w-12 justify-center sticky top-24 self-start pt-2">
+                <h2
+                  className="font-display text-[2.8rem] text-olive"
+                  style={{ writingMode: "vertical-rl", transform: "rotate(180deg)", letterSpacing: "0.05em" }}
+                >
+                  Destacados
+                </h2>
+              </div>
+              <div className="flex-1 min-w-0">
+                <ScrollableGrid colWidth="calc(25% - 12px)" bgFrom="#FDF6EC">
+                  {featured.map((a, idx) => (
+                    <div key={a._id} className="snap-start">
+                      <ArrangementCard arrangement={a} onOpen={openArrangement} index={idx} showFeaturedBadge={false} />
+                    </div>
+                  ))}
+                </ScrollableGrid>
+              </div>
+            </div>
+
           </div>
         </section>
       )}
@@ -146,8 +131,7 @@ export default function Catalog() {
       {/* Catálogo completo + búsqueda + filtros */}
       <section id="catalogo" className="bg-cream px-5 py-20 sm:px-8 sm:py-28">
         <div className="mx-auto max-w-6xl">
-          <hr className="section-rule mb-20" />
-          <GSAPScrollTitle label="— Nuestro catálogo">
+<GSAPScrollTitle label="— Nuestro catálogo">
             Todos los arreglos
           </GSAPScrollTitle>
 
@@ -201,18 +185,34 @@ export default function Catalog() {
               <p className="py-16 text-center text-olive/50">
                 No encontramos arreglos con esa búsqueda. Intenta con otra palabra.
               </p>
-            ) : (() => {
-                const cfg = buildGridConfig(filtered.length, isMobile);
-                return (
-                  <div className={cfg.className} style={cfg.style}>
+            ) : (
+              <>
+                {/* Mobile — 2 filas, scroll horizontal con peek */}
+                <div className="sm:hidden -mx-5 overflow-x-auto snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                  <div
+                    className="grid grid-rows-2 grid-flow-col gap-4 pl-5 pr-10"
+                    style={{ gridAutoColumns: "calc(50vw - 28px)" }}
+                  >
                     {filtered.map((a, idx) => (
-                      <div key={a._id} className={cfg.itemClass}>
+                      <div key={a._id} className="snap-start">
                         <ArrangementCard arrangement={a} onOpen={openArrangement} index={idx} />
                       </div>
                     ))}
                   </div>
-                );
-              })()}
+                </div>
+
+                {/* Desktop — 2 filas con scroll horizontal si excede */}
+                <div className="hidden sm:block">
+                  <ScrollableGrid colWidth="calc(25% - 12px)" bgFrom="#F9EDD3">
+                    {filtered.map((a, idx) => (
+                      <div key={a._id} className="snap-start">
+                        <ArrangementCard arrangement={a} onOpen={openArrangement} index={idx} />
+                      </div>
+                    ))}
+                  </ScrollableGrid>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </section>
@@ -242,6 +242,68 @@ function FilterPill({
     >
       {label}
     </button>
+  );
+}
+
+function ScrollableGrid({
+  children,
+  colWidth,
+  bgFrom,
+}: {
+  children: React.ReactNode;
+  colWidth: string;
+  bgFrom: string;
+}) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const check = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollRight(el.scrollWidth - el.scrollLeft - el.clientWidth > 8);
+  }, []);
+
+  useEffect(() => {
+    check();
+    const el = scrollRef.current;
+    if (!el) return;
+    el.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    return () => {
+      el.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+    };
+  }, [check, children]);
+
+  return (
+    <div className="relative">
+      <div
+        ref={scrollRef}
+        className="overflow-x-auto snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        <div
+          className="grid grid-rows-2 grid-flow-col gap-4"
+          style={{ gridAutoColumns: colWidth }}
+        >
+          {children}
+        </div>
+      </div>
+
+      {/* Indicador de scroll derecho */}
+      <div
+        className={`pointer-events-none absolute inset-y-0 right-0 w-28 transition-opacity duration-300 ${canScrollRight ? "opacity-100" : "opacity-0"}`}
+        style={{ background: `linear-gradient(to left, ${bgFrom} 30%, transparent)` }}
+      />
+      <button
+        onClick={() => scrollRef.current?.scrollBy({ left: scrollRef.current.clientWidth * 0.75, behavior: "smooth" })}
+        className={`absolute right-3 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-cream-light shadow-md text-olive transition-all duration-300 hover:bg-olive hover:text-cream-light ${canScrollRight ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+        aria-label="Ver más"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
+          <path d="m9 18 6-6-6-6" />
+        </svg>
+      </button>
+    </div>
   );
 }
 

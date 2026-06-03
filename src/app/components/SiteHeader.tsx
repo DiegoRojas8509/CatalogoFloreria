@@ -31,11 +31,19 @@ export default function SiteHeader() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 sm:px-10">
 
         {/* Logo */}
-        <a href="#top" className="group leading-none">
-          <span className="block font-display text-xl tracking-tight text-olive transition-opacity group-hover:opacity-70">
-            {site.name}
+        <a href="#top" className="group flex items-center gap-3 leading-none">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logo.png"
+            alt={site.name}
+            className="h-9 w-auto shrink-0 object-contain transition-opacity group-hover:opacity-75 sm:h-10"
+          />
+          <span>
+            <span className="block font-display text-xl tracking-tight text-olive transition-opacity group-hover:opacity-70">
+              {site.name}
+            </span>
+            <span className="dash-label text-[0.6rem] text-olive">Florería artesanal</span>
           </span>
-          <span className="dash-label text-[0.6rem] text-olive">Florería</span>
         </a>
 
         {/* Nav escritorio */}
@@ -53,7 +61,7 @@ export default function SiteHeader() {
             href={whatsappLink()}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-editorial text-xs"
+            className="rounded-full bg-olive px-4 py-2 text-xs font-medium text-cream-light transition hover:bg-olive-dark"
           >
             WhatsApp
           </a>

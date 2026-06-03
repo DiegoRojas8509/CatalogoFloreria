@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propuesta de diseño</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #ede7dd; font-family: system-ui, sans-serif; padding: 32px 24px 80px; color: #1a1a1a; }
+
+h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 6px; }
+.subtitle { font-size: 0.85rem; color: #666; margin-bottom: 32px; }
+
+.section-block {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+}
+.section-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid #f0ebe3;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-tag {
+  background: #f0ebe3;
+  color: #5c2e14;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.section-title { font-size: 0.9rem; font-weight: 600; }
+.section-body { padding: 20px; }
+
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+/* ── BEFORE / AFTER labels ── */
+.ba-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 8px;
+}
+.ba-label.before { color: #999; }
+.ba-label.after { color: #2d4a35; }
+
+/* ── MOCKUP SHELL ── */
+.mock-shell {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+/* ============ HEADER ============ */
+.hdr-old {
+  background: #fdf6ec;
+  padding: 9px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.hdr-old-logo { font-size: 0.8rem; font-weight: 600; color: #5c2e14; }
+.hdr-old-sub { font-size: 0.45rem; color: rgba(92,46,20,0.35); text-transform: uppercase; letter-spacing: 0.2em; display: block; }
+.hdr-old-nav { display: flex; gap: 8px; align-items: center; }
+.hdr-old-nav span { font-size: 0.45rem; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(92,46,20,0.45); }
+.hdr-old-btn { border: 1px solid #5c2e14; padding: 3px 8px; font-size: 0.45rem; color: #5c2e14; text-transform: uppercase; letter-spacing: 0.1em; }
+
+.hdr-new {
+  background: #fdf6ec;
+  padding: 9px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(92,46,20,0.07);
+}
+.hdr-new-logo-wrap { display: flex; align-items: center; gap: 7px; }
+.hdr-new-icon { width: 26px; height: 26px; background: #5c2e14; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #f9edd3; flex-shrink: 0; }
+.hdr-new-logo { font-size: 0.82rem; font-weight: 600; color: #5c2e14; line-height: 1.1; }
+.hdr-new-tagline { font-size: 0.42rem; color: rgba(92,46,20,0.4); text-transform: uppercase; letter-spacing: 0.2em; }
+.hdr-new-nav { display: flex; gap: 8px; align-items: center; }
+.hdr-new-nav span { font-size: 0.45rem; color: rgba(92,46,20,0.5); }
+.hdr-new-btn { background: #5c2e14; color: #f9edd3; padding: 4px 10px; border-radius: 20px; font-size: 0.45rem; font-weight: 500; }
+
+/* ============ HERO ============ */
+.hero-old {
+  background: #fdf6ec;
+  padding: 20px 14px 14px;
+  text-align: center;
+}
+.hero-old-label { font-size: 0.42rem; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(92,46,20,0.35); margin-bottom: 8px; }
+.hero-old-h1 { font-size: 1.6rem; line-height: 0.9; color: #5c2e14; margin-bottom: 8px; font-weight: 300; }
+.hero-old-h1 em { color: #2d4a35; }
+.hero-old-rule { width: 30px; height: 1px; background: rgba(92,46,20,0.15); margin: 8px auto; }
+.hero-old-sub { font-size: 0.5rem; color: rgba(92,46,20,0.5); margin-bottom: 10px; }
+.hero-old-btns { display: flex; gap: 6px; justify-content: center; }
+.hero-old-btn-solid { background: #5c2e14; color: #fdf6ec; padding: 5px 12px; font-size: 0.45rem; text-transform: uppercase; letter-spacing: 0.1em; }
+.hero-old-btn-outline { border: 1px solid rgba(92,46,20,0.4); color: #5c2e14; padding: 5px 12px; font-size: 0.45rem; text-transform: uppercase; letter-spacing: 0.1em; }
+
+.hero-new {
+  background: linear-gradient(180deg, #fdf6ec 0%, #f5e8d0 100%);
+  padding: 20px 14px 14px;
+  text-align: center;
+}
+.hero-new-badge { display: inline-flex; align-items: center; gap: 4px; background: rgba(92,46,20,0.08); border-radius: 20px; padding: 3px 10px; font-size: 0.42rem; text-transform: uppercase; letter-spacing: 0.12em; color: #5c2e14; margin-bottom: 10px; }
+.hero-new-h1 { font-size: 1.6rem; line-height: 0.9; color: #3d1d0a; margin-bottom: 6px; font-weight: 300; }
+.hero-new-h1 em { color: #2d4a35; }
+.hero-new-sub { font-size: 0.5rem; color: rgba(92,46,20,0.55); margin-bottom: 12px; line-height: 1.5; }
+.hero-new-btns { display: flex; gap: 6px; justify-content: center; }
+.hero-new-btn-solid { background: #5c2e14; color: #fdf6ec; padding: 5px 12px; border-radius: 8px; font-size: 0.45rem; font-weight: 500; }
+.hero-new-btn-outline { border: 1.5px solid rgba(45,74,53,0.5); color: #2d4a35; padding: 5px 12px; border-radius: 8px; font-size: 0.45rem; background: rgba(45,74,53,0.06); }
+
+/* ============ CARDS ============ */
+.cards-old { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: #f9edd3; padding: 12px; }
+.card-old { background: #e8d5b0; border-radius: 6px; overflow: hidden; }
+.card-old-img { aspect-ratio: 3/4; background: linear-gradient(135deg, #d4a068, #c4622d); }
+.card-old-body { padding: 5px; }
+.card-old-name { font-size: 0.48rem; font-weight: 600; color: #3d1d0a; }
+.card-old-cat { font-size: 0.4rem; color: rgba(92,46,20,0.45); }
+
+.cards-new { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: #f5e8d0; padding: 12px; }
+.card-new { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(92,46,20,0.08); }
+.card-new-img { aspect-ratio: 3/4; position: relative; overflow: hidden; }
+.card-new-img-inner { width: 100%; height: 100%; background: linear-gradient(135deg, #d4a068, #c4622d); }
+.card-new-img-inner.g2 { background: linear-gradient(135deg, #4a6b52, #2d4a35); }
+.card-new-img-inner.g3 { background: linear-gradient(135deg, #e8d5b0, #d4b896); }
+.card-new-badge-avail { position: absolute; top: 5px; left: 5px; background: rgba(45,74,53,0.85); color: white; font-size: 0.38rem; padding: 1px 5px; border-radius: 4px; }
+.card-new-body { padding: 7px 8px; }
+.card-new-name { font-size: 0.5rem; font-weight: 600; color: #3d1d0a; margin-bottom: 2px; }
+.card-new-price-row { display: flex; justify-content: space-between; align-items: center; }
+.card-new-price { font-size: 0.5rem; font-weight: 700; color: #2d4a35; }
+.card-new-cat { font-size: 0.38rem; color: rgba(92,46,20,0.4); }
+.card-new-btn { width: 100%; margin-top: 5px; background: #f5e8d0; color: #5c2e14; font-size: 0.42rem; border: none; padding: 3px 0; border-radius: 6px; text-align: center; font-weight: 500; }
+
+/* ============ ABOUT ============ */
+.about-old {
+  background: #5c2e14;
+  padding: 20px 14px;
+  text-align: center;
+}
+.about-old-label { font-size: 0.4rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(249,237,211,0.35); margin-bottom: 8px; }
+.about-old-quote { font-size: 1rem; color: #fdf6ec; font-style: italic; font-weight: 300; margin-bottom: 8px; line-height: 1.2; }
+.about-old-rule { width: 24px; height: 1px; background: rgba(249,237,211,0.2); margin: 8px auto; }
+.about-old-body { font-size: 0.48rem; color: rgba(249,237,211,0.55); line-height: 1.6; }
+
+.about-new {
+  background: linear-gradient(135deg, #3d1d0a 0%, #5c2e14 50%, #4a2010 100%);
+  padding: 20px 14px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.about-new::before {
+  content: '✦';
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  font-size: 3rem;
+  color: rgba(212,148,58,0.08);
+}
+.about-new-badge { display: inline-flex; align-items: center; gap: 4px; background: rgba(212,148,58,0.15); border-radius: 20px; padding: 2px 8px; font-size: 0.4rem; text-transform: uppercase; letter-spacing: 0.12em; color: #d4943a; margin-bottom: 8px; }
+.about-new-quote { font-size: 1.05rem; color: #fdf6ec; font-style: italic; font-weight: 300; margin-bottom: 6px; line-height: 1.15; }
+.about-new-rule { width: 24px; height: 1px; background: rgba(212,148,58,0.3); margin: 8px auto; }
+.about-new-body { font-size: 0.48rem; color: rgba(249,237,211,0.6); line-height: 1.6; }
+.about-new-link { display: inline-block; margin-top: 10px; background: rgba(212,148,58,0.15); border: 1px solid rgba(212,148,58,0.3); color: #d4943a; padding: 4px 12px; border-radius: 20px; font-size: 0.42rem; }
+
+/* ============ CHANGE LIST ============ */
+.changes { list-style: none; padding: 0; }
+.changes li { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; border-bottom: 1px solid #f5f0e8; font-size: 0.82rem; color: #444; }
+.changes li:last-child { border-bottom: none; }
+.changes .dot { width: 6px; height: 6px; border-radius: 50%; background: #2d4a35; flex-shrink: 0; margin-top: 6px; }
+.changes .remove { background: #c4622d; }
+</style>
+
+<h2>Propuesta completa — Dirección B: Orgánico & Cálido</h2>
+<p class="subtitle">Antes / Después de cada sección · Además se elimina el cursor personalizado</p>
+
+<!-- CURSOR -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-tag" style="background:#fde8e0;color:#c4622d;">Se elimina</span>
+    <span class="section-title">Cursor personalizado</span>
+  </div>
+  <div class="section-body">
+    <ul class="changes">
+      <li><span class="dot remove"></span>Se quita el componente <code>Cursor.tsx</code> del layout</li>
+      <li><span class="dot remove"></span>Se elimina el CSS del cursor (.cursor-dot, .cursor-ring, .has-custom-cursor)</li>
+      <li><span class="dot" style="background:#2d4a35"></span>El cursor del sistema vuelve a ser el normal</li>
+    </ul>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-tag">Header</span>
+    <span class="section-title">Navegación — ícono circular + botón WhatsApp pill</span>
+  </div>
+  <div class="section-body">
+    <div class="split">
+      <div>
+        <div class="ba-label before">Antes</div>
+        <div class="mock-shell"><div class="hdr-old">
+          <div>
+            <div class="hdr-old-logo">Raíz Floral</div>
+            <span class="hdr-old-sub">Florería</span>
+          </div>
+          <div class="hdr-old-nav">
+            <span>Catálogo</span><span>Nosotros</span><span>Contacto</span>
+            <span class="hdr-old-btn">WhatsApp</span>
+          </div>
+        </div></div>
+      </div>
+      <div>
+        <div class="ba-label after">Después</div>
+        <div class="mock-shell"><div class="hdr-new">
+          <div class="hdr-new-logo-wrap">
+            <div class="hdr-new-icon">✦</div>
+            <div>
+              <div class="hdr-new-logo">Raíz Floral</div>
+              <div class="hdr-new-tagline">Florería artesanal</div>
+            </div>
+          </div>
+          <div class="hdr-new-nav">
+            <span>Catálogo</span><span>Nosotros</span><span>Contacto</span>
+            <span class="hdr-new-btn">WhatsApp</span>
+          </div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-tag">Hero</span>
+    <span class="section-title">Portada — badge pill + gradiente sutil + botones redondeados</span>
+  </div>
+  <div class="section-body">
+    <div class="split">
+      <div>
+        <div class="ba-label before">Antes</div>
+        <div class="mock-shell">
+          <div class="hero-old">
+            <div class="hero-old-label">— Florería · CDMX</div>
+            <div class="hero-old-h1">Flores con<em>intención.</em></div>
+            <div class="hero-old-rule"></div>
+            <div class="hero-old-sub">Arreglos diseñados a mano para cada ocasión</div>
+            <div class="hero-old-btns">
+              <div class="hero-old-btn-solid">Ver el catálogo ↓</div>
+              <div class="hero-old-btn-outline">Cotizar por WhatsApp</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="ba-label after">Después</div>
+        <div class="mock-shell">
+          <div class="hero-new">
+            <div class="hero-new-badge">✦ Florería artesanal · CDMX</div>
+            <div class="hero-new-h1">Flores con<em>intención.</em></div>
+            <div class="hero-new-sub">Arreglos diseñados a mano<br>para cada ocasión especial</div>
+            <div class="hero-new-btns">
+              <div class="hero-new-btn-solid">Ver el catálogo →</div>
+              <div class="hero-new-btn-outline">Cotizar por WhatsApp</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CARDS -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-tag">Catálogo</span>
+    <span class="section-title">Cards — precio visible + badge de disponibilidad + bordes redondeados</span>
+  </div>
+  <div class="section-body">
+    <div class="split">
+      <div>
+        <div class="ba-label before">Antes</div>
+        <div class="mock-shell">
+          <div class="cards-old">
+            <div class="card-old"><div class="card-old-img"></div><div class="card-old-body"><div class="card-old-name">Ramo primavera</div><div class="card-old-cat">Ramos</div></div></div>
+            <div class="card-old"><div class="card-old-img" style="background:linear-gradient(135deg,#4a6b52,#2d4a35)"></div><div class="card-old-body"><div class="card-old-name">Bouquet verde</div><div class="card-old-cat">Bodas</div></div></div>
+            <div class="card-old"><div class="card-old-img" style="background:linear-gradient(135deg,#e8d5b0,#d4b896)"></div><div class="card-old-body"><div class="card-old-name">Arreglo eterno</div><div class="card-old-cat">Especial</div></div></div>
+          </div>
+        </div>
+        <p style="font-size:0.7rem;color:#999;margin-top:6px;">El precio solo aparece al abrir el modal</p>
+      </div>
+      <div>
+        <div class="ba-label after">Después</div>
+        <div class="mock-shell">
+          <div class="cards-new">
+            <div class="card-new">
+              <div class="card-new-img"><div class="card-new-img-inner"></div><div class="card-new-badge-avail">Disponible</div></div>
+              <div class="card-new-body">
+                <div class="card-new-name">Ramo primavera</div>
+                <div class="card-new-price-row"><span class="card-new-price">$450 MXN</span><span class="card-new-cat">Ramos</span></div>
+                <div class="card-new-btn">Ver detalle</div>
+              </div>
+            </div>
+            <div class="card-new">
+              <div class="card-new-img"><div class="card-new-img-inner g2"></div><div class="card-new-badge-avail">Disponible</div></div>
+              <div class="card-new-body">
+                <div class="card-new-name">Bouquet verde</div>
+                <div class="card-new-price-row"><span class="card-new-price">$650 MXN</span><span class="card-new-cat">Bodas</span></div>
+                <div class="card-new-btn">Ver detalle</div>
+              </div>
+            </div>
+            <div class="card-new">
+              <div class="card-new-img"><div class="card-new-img-inner g3"></div><div class="card-new-badge-avail">Disponible</div></div>
+              <div class="card-new-body">
+                <div class="card-new-name">Arreglo eterno</div>
+                <div class="card-new-price-row"><span class="card-new-price">$890 MXN</span><span class="card-new-cat">Especial</span></div>
+                <div class="card-new-btn">Ver detalle</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-tag">Nosotros</span>
+    <span class="section-title">Sección oscura — gradiente + acento dorado + badge</span>
+  </div>
+  <div class="section-body">
+    <div class="split">
+      <div>
+        <div class="ba-label before">Antes</div>
+        <div class="mock-shell">
+          <div class="about-old">
+            <div class="about-old-label">— Nosotros</div>
+            <div class="about-old-quote">"Cada flor tiene su momento."</div>
+            <div class="about-old-rule"></div>
+            <div class="about-old-body">Somos una florería artesanal con más de 10 años creando arreglos únicos.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="ba-label after">Después</div>
+        <div class="mock-shell">
+          <div class="about-new">
+            <div class="about-new-badge">✦ Nosotros</div>
+            <div class="about-new-quote">"Cada flor tiene su momento."</div>
+            <div class="about-new-rule"></div>
+            <div class="about-new-body">Somos una florería artesanal con más de 10 años creando arreglos únicos.</div>
+            <div class="about-new-link">Contáctanos →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="background:#2d4a35;color:#f9edd3;border-radius:12px;padding:16px 20px;margin-top:8px;">
+  <p style="font-size:0.9rem;font-weight:600;margin-bottom:6px;">¿Apruebas este diseño?</p>
+  <p style="font-size:0.78rem;opacity:0.8;">Si te parece bien, procedo a implementar todos los cambios en el código. Dime en el chat.</p>
+</div>

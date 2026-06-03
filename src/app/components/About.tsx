@@ -48,10 +48,13 @@ export default function About() {
     <section
       id="nosotros"
       ref={containerRef}
-      className="bg-olive px-6 py-28 text-cream sm:px-10 sm:py-36"
+      className="px-6 py-28 text-cream sm:px-10 sm:py-36"
+      style={{ background: "linear-gradient(135deg, #3D1D0A 0%, #5C2E14 55%, #4A2010 100%)" }}
     >
       <div className="mx-auto max-w-3xl text-center">
-        <p className="about-label dash-label text-sage-light">— Nosotros</p>
+        <span className="about-label inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[0.82rem] font-medium tracking-wide" style={{ background: "rgba(212,148,58,0.15)", color: "#D4943A" }}>
+· Nosotros
+        </span>
 
         {/* Cita con word-by-word reveal */}
         <blockquote
@@ -66,13 +69,22 @@ export default function About() {
         </blockquote>
 
         <div
-          className="about-rule mx-auto mt-10 w-10 border-t border-cream/20"
+          className="about-rule mx-auto mt-10 w-10 border-t"
+          style={{ borderColor: "rgba(212,148,58,0.35)" }}
           aria-hidden="true"
         />
 
         <p className="about-body mx-auto mt-8 max-w-xl text-lg leading-relaxed text-cream/65">
           {site.about}
         </p>
+
+        <a
+          href="#contacto"
+          className="mt-10 inline-flex items-center gap-2 rounded-full border px-6 py-2.5 text-sm transition"
+          style={{ borderColor: "rgba(212,148,58,0.35)", color: "#D4943A" }}
+        >
+          Contáctanos →
+        </a>
       </div>
     </section>
   );

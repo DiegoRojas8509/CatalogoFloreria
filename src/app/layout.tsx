@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Hanken_Grotesk } from "next/font/google";
 import { site } from "@/lib/config";
-import Cursor from "./components/Cursor";
 import "./globals.css";
 
 const display = Fraunces({
@@ -22,6 +21,10 @@ const body = Hanken_Grotesk({
 export const metadata: Metadata = {
   title: `${site.name} · Florería en ${site.city}`,
   description: site.tagline,
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
   openGraph: {
     title: `${site.name} · Florería`,
     description: site.tagline,
@@ -37,7 +40,6 @@ export default function RootLayout({
   return (
     <html lang="es-MX" className={`${display.variable} ${body.variable}`}>
       <body>
-        <Cursor />
         {children}
       </body>
     </html>
