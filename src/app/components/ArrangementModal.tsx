@@ -29,14 +29,14 @@ export default function ArrangementModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-olive/40 p-0 backdrop-blur-sm animate-fade-in sm:items-center sm:p-6"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-olive/50 p-0 backdrop-blur-sm animate-fade-in sm:items-center sm:p-6"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
       aria-label={arrangement.name}
     >
       <div
-        className="relative max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-t-xl2 bg-cream-light shadow-2xl animate-scale-in sm:rounded-xl2"
+        className="relative max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-t-xl2 bg-cream-light shadow-2xl animate-slide-up sm:animate-scale-in sm:rounded-xl2"
         onClick={(e) => e.stopPropagation()}
       >
         <button

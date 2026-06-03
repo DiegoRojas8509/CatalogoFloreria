@@ -3,12 +3,12 @@ import { structureTool } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
 import { schemaTypes } from "./sanity/schemaTypes";
 
-const projectId = "donxsfze";
+const projectId = "a53z2c65";
 const dataset = "production";
 
 export default defineConfig({
-  name: "un-jardin",
-  title: "Un Jardín · Administración",
+  name: "raiz-floral",
+  title: "Raíz Floral · Administración",
   projectId,
   dataset,
   plugins: [

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dirección de diseño</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #f0ebe3; font-family: system-ui, sans-serif; padding: 32px 24px 60px; }
+
+  h2 { font-size: 1.25rem; font-weight: 600; color: #1a1a1a; margin-bottom: 6px; }
+  .subtitle { font-size: 0.85rem; color: #666; margin-bottom: 28px; }
+
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+  .card {
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2.5px solid transparent;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+    background: white;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+  .card.selected { border-color: #5c2e14; box-shadow: 0 0 0 4px rgba(92,46,20,0.12); }
+
+  .card-preview { height: 340px; position: relative; overflow: hidden; }
+  .card-label {
+    padding: 18px 20px 16px;
+    border-top: 1px solid rgba(0,0,0,0.06);
+  }
+  .card-label h3 { font-size: 1rem; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+  .card-label p { font-size: 0.78rem; color: #777; line-height: 1.4; }
+
+  /* ===== DIRECCIÓN A: EDITORIAL AUDAZ ===== */
+  .dir-a { background: #fdf6ec; height: 100%; display: flex; flex-direction: column; }
+  .dir-a-header {
+    background: #fdf6ec;
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(92,46,20,0.1);
+  }
+  .dir-a-logo { font-size: 0.8rem; font-weight: 700; color: #5c2e14; letter-spacing: -0.02em; }
+  .dir-a-nav { display: flex; gap: 8px; align-items: center; }
+  .dir-a-nav span { font-size: 0.45rem; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(92,46,20,0.45); }
+  .dir-a-nav .cta { border: 1px solid #5c2e14; padding: 2px 7px; font-size: 0.45rem; color: #5c2e14; text-transform: uppercase; letter-spacing: 0.1em; }
+
+  .dir-a-hero {
+    flex: 1;
+    padding: 18px 14px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background: #fdf6ec;
+  }
+  .dir-a-eyebrow { font-size: 0.42rem; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(92,46,20,0.35); margin-bottom: 8px; }
+  .dir-a-h1 { font-size: 2.1rem; line-height: 0.88; color: #5c2e14; margin-bottom: 10px; font-weight: 300; }
+  .dir-a-h1 em { color: #2d4a35; font-style: italic; display: block; }
+  .dir-a-image-block {
+    width: 100%;
+    flex: 1;
+    background: linear-gradient(135deg, #d4a068 0%, #c4622d 100%);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    padding: 10px;
+    min-height: 80px;
+  }
+  .dir-a-image-block::before {
+    content: '✦';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -60%);
+    font-size: 2rem;
+    color: rgba(255,255,255,0.25);
+  }
+  .dir-a-pill { background: rgba(255,255,255,0.9); padding: 3px 8px; font-size: 0.42rem; color: #5c2e14; letter-spacing: 0.1em; text-transform: uppercase; }
+
+  .dir-a-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 0 14px 12px; }
+  .dir-a-mini-card { background: #e8d5b0; border-radius: 4px; aspect-ratio: 3/4; }
+  .dir-a-mini-card:first-child { background: linear-gradient(135deg, #d4a068, #c4622d); }
+
+  /* ===== DIRECCIÓN B: ORGÁNICO Y CÁLIDO ===== */
+  .dir-b { background: #f5e8d0; height: 100%; display: flex; flex-direction: column; }
+  .dir-b-header {
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .dir-b-logo-wrap { display: flex; align-items: center; gap: 6px; }
+  .dir-b-icon { width: 22px; height: 22px; background: #5c2e14; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; color: #f9edd3; }
+  .dir-b-logo { font-size: 0.75rem; font-weight: 600; color: #5c2e14; }
+  .dir-b-nav { display: flex; gap: 8px; align-items: center; }
+  .dir-b-nav span { font-size: 0.45rem; color: rgba(92,46,20,0.5); }
+  .dir-b-cta { background: #5c2e14; padding: 3px 8px; font-size: 0.42rem; color: #f9edd3; border-radius: 20px; }
+
+  .dir-b-hero {
+    padding: 14px;
+    text-align: center;
+    background: linear-gradient(180deg, #f5e8d0 0%, #f0dcc0 100%);
+  }
+  .dir-b-badge { display: inline-block; background: rgba(92,46,20,0.08); border-radius: 20px; padding: 2px 10px; font-size: 0.42rem; text-transform: uppercase; letter-spacing: 0.15em; color: #5c2e14; margin-bottom: 6px; }
+  .dir-b-h1 { font-size: 1.5rem; color: #3d1d0a; line-height: 1; margin-bottom: 4px; font-weight: 300; }
+  .dir-b-h1 em { color: #2d4a35; }
+  .dir-b-sub { font-size: 0.5rem; color: rgba(92,46,20,0.55); margin-bottom: 8px; }
+  .dir-b-btns { display: flex; gap: 4px; justify-content: center; flex-wrap: wrap; }
+  .dir-b-btn-main { background: #5c2e14; color: #f9edd3; padding: 4px 10px; border-radius: 6px; font-size: 0.42rem; }
+  .dir-b-btn-sec { background: rgba(45,74,53,0.12); color: #2d4a35; padding: 4px 10px; border-radius: 6px; font-size: 0.42rem; }
+
+  .dir-b-cards-row { display: flex; gap: 6px; padding: 10px 14px 8px; overflow: hidden; }
+  .dir-b-card-item { flex: 1; border-radius: 10px; overflow: hidden; }
+  .dir-b-card-img { aspect-ratio: 3/4; background: linear-gradient(135deg, #e8d5b0, #d4b896); border-radius: 10px 10px 0 0; position: relative; }
+  .dir-b-card-img:nth-child(1) { background: linear-gradient(135deg, #c4622d, #d4943a); }
+  .dir-b-card-foot { padding: 4px 2px; }
+  .dir-b-card-name { font-size: 0.45rem; font-weight: 600; color: #3d1d0a; }
+  .dir-b-card-price { font-size: 0.42rem; color: #2d4a35; }
+
+  .dir-b-tags { display: flex; gap: 4px; padding: 0 14px 10px; flex-wrap: wrap; }
+  .dir-b-tag { background: white; border-radius: 20px; padding: 2px 8px; font-size: 0.4rem; color: #5c2e14; border: 1px solid rgba(92,46,20,0.15); }
+
+  /* ===== DIRECCIÓN C: MAISON EDITORIAL ===== */
+  .dir-c { background: #1a0f08; height: 100%; display: flex; flex-direction: column; }
+  .dir-c-header {
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(249,237,211,0.08);
+  }
+  .dir-c-logo { font-size: 0.75rem; color: #f9edd3; letter-spacing: 0.08em; font-weight: 300; }
+  .dir-c-nav { display: flex; gap: 8px; align-items: center; }
+  .dir-c-nav span { font-size: 0.42rem; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(249,237,211,0.35); }
+  .dir-c-cta { border: 1px solid rgba(249,237,211,0.3); padding: 2px 7px; font-size: 0.42rem; color: #f9edd3; letter-spacing: 0.1em; text-transform: uppercase; }
+
+  .dir-c-hero {
+    padding: 16px 14px 10px;
+    flex: 1;
+  }
+  .dir-c-label { font-size: 0.4rem; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(249,237,211,0.25); margin-bottom: 10px; }
+  .dir-c-h1 { font-size: 2rem; line-height: 0.9; color: #f9edd3; font-weight: 300; margin-bottom: 6px; }
+  .dir-c-h1 em { color: #d4943a; }
+  .dir-c-rule { width: 30px; height: 1px; background: rgba(249,237,211,0.2); margin: 8px 0; }
+  .dir-c-sub { font-size: 0.48rem; color: rgba(249,237,211,0.4); line-height: 1.5; margin-bottom: 10px; max-width: 140px; }
+  .dir-c-btns { display: flex; gap: 4px; }
+  .dir-c-btn { border: 1px solid rgba(249,237,211,0.25); padding: 3px 8px; font-size: 0.42rem; color: #f9edd3; text-transform: uppercase; letter-spacing: 0.1em; }
+  .dir-c-btn-fill { background: #d4943a; border: none; color: #1a0f08; padding: 3px 8px; font-size: 0.42rem; text-transform: uppercase; letter-spacing: 0.1em; }
+
+  .dir-c-strip {
+    background: rgba(212,148,58,0.1);
+    border-top: 1px solid rgba(212,148,58,0.2);
+    padding: 6px 14px;
+    display: flex;
+    gap: 10px;
+    overflow: hidden;
+  }
+  .dir-c-strip span { font-size: 0.4rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(212,148,58,0.6); white-space: nowrap; }
+
+  .dir-c-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; padding: 3px 14px 12px; }
+  .dir-c-mini { aspect-ratio: 3/4; border-radius: 4px; }
+  .dir-c-mini:nth-child(1) { background: linear-gradient(135deg, #5c2e14, #3d1d0a); }
+  .dir-c-mini:nth-child(2) { background: linear-gradient(135deg, #2d4a35, #1a2e21); }
+  .dir-c-mini:nth-child(3) { background: linear-gradient(135deg, #d4943a, #c4622d); }
+
+  .selected-indicator {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #5c2e14;
+    color: white;
+    padding: 10px 24px;
+    border-radius: 24px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    box-shadow: 0 4px 16px rgba(92,46,20,0.3);
+    display: none;
+    z-index: 100;
+  }
+  .selected-indicator.visible { display: block; }
+</style>
+
+<h2>¿Qué dirección de diseño te llama más?</h2>
+<p class="subtitle">Cada opción mantiene la paleta terracota/verde botella, pero con personalidad distinta</p>
+
+<div class="cards">
+
+  <!-- OPCIÓN A -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-preview">
+      <div class="dir-a">
+        <div class="dir-a-header">
+          <div class="dir-a-logo">Raíz Floral</div>
+          <div class="dir-a-nav">
+            <span>Catálogo</span>
+            <span>Nosotros</span>
+            <span class="cta">WhatsApp</span>
+          </div>
+        </div>
+        <div class="dir-a-hero">
+          <div class="dir-a-eyebrow">— Florería · CDMX</div>
+          <div class="dir-a-h1">Flores con<em>intención.</em></div>
+          <div class="dir-a-image-block">
+            <div class="dir-a-pill">✦ Temporada primavera</div>
+          </div>
+        </div>
+        <div class="dir-a-grid">
+          <div class="dir-a-mini-card"></div>
+          <div class="dir-a-mini-card"></div>
+          <div class="dir-a-mini-card"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">
+      <h3>A — Editorial Bold</h3>
+      <p>Imagen hero grande, tipografía izquierda, cards con más presencia visual. Más impacto en primer scroll.</p>
+    </div>
+  </div>
+
+  <!-- OPCIÓN B -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-preview">
+      <div class="dir-b">
+        <div class="dir-b-header">
+          <div class="dir-b-logo-wrap">
+            <div class="dir-b-icon">✦</div>
+            <div class="dir-b-logo">Raíz Floral</div>
+          </div>
+          <div class="dir-b-nav">
+            <span>Catálogo</span>
+            <span>Nosotros</span>
+            <div class="dir-b-cta">WhatsApp</div>
+          </div>
+        </div>
+        <div class="dir-b-hero">
+          <div class="dir-b-badge">✦ Florería artesanal</div>
+          <div class="dir-b-h1">Flores con <em>intención.</em></div>
+          <div class="dir-b-sub">Arreglos diseñados a mano para cada momento</div>
+          <div class="dir-b-btns">
+            <div class="dir-b-btn-main">Ver catálogo →</div>
+            <div class="dir-b-btn-sec">Cotizar</div>
+          </div>
+        </div>
+        <div class="dir-b-cards-row">
+          <div class="dir-b-card-item">
+            <div class="dir-b-card-img"></div>
+            <div class="dir-b-card-foot">
+              <div class="dir-b-card-name">Ramo de temporada</div>
+              <div class="dir-b-card-price">$450 MXN</div>
+            </div>
+          </div>
+          <div class="dir-b-card-item">
+            <div class="dir-b-card-img" style="background: linear-gradient(135deg,#e8d5b0,#d4b896)"></div>
+            <div class="dir-b-card-foot">
+              <div class="dir-b-card-name">Arreglo eterno</div>
+              <div class="dir-b-card-price">$890 MXN</div>
+            </div>
+          </div>
+          <div class="dir-b-card-item">
+            <div class="dir-b-card-img" style="background: linear-gradient(135deg,#2d4a35,#4a6b52)"></div>
+            <div class="dir-b-card-foot">
+              <div class="dir-b-card-name">Bouquet verde</div>
+              <div class="dir-b-card-price">$650 MXN</div>
+            </div>
+          </div>
+        </div>
+        <div class="dir-b-tags">
+          <div class="dir-b-tag">Todos</div>
+          <div class="dir-b-tag">Boda</div>
+          <div class="dir-b-tag">Condolencias</div>
+          <div class="dir-b-tag">+ Ramos</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">
+      <h3>B — Orgánico & Cálido</h3>
+      <p>Más redondez, precio visible en cards, botones con color, sensación más amigable y comercial.</p>
+    </div>
+  </div>
+
+  <!-- OPCIÓN C -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-preview">
+      <div class="dir-c">
+        <div class="dir-c-header">
+          <div class="dir-c-logo">RAÍZ FLORAL</div>
+          <div class="dir-c-nav">
+            <span>Catálogo</span>
+            <span>Nosotros</span>
+            <span class="dir-c-cta">WhatsApp</span>
+          </div>
+        </div>
+        <div class="dir-c-hero">
+          <div class="dir-c-label">— Florería artesanal · CDMX</div>
+          <div class="dir-c-h1">Flores con <em>intención.</em></div>
+          <div class="dir-c-rule"></div>
+          <div class="dir-c-sub">Arreglos diseñados a mano, entregados con cuidado.</div>
+          <div class="dir-c-btns">
+            <div class="dir-c-btn-fill">Ver catálogo</div>
+            <div class="dir-c-btn">Cotizar</div>
+          </div>
+        </div>
+        <div class="dir-c-strip">
+          <span>Rosas</span><span>✦</span><span>Peonías</span><span>✦</span><span>Girasoles</span><span>✦</span><span>Lavanda</span>
+        </div>
+        <div class="dir-c-grid">
+          <div class="dir-c-mini"></div>
+          <div class="dir-c-mini"></div>
+          <div class="dir-c-mini"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">
+      <h3>C — Maison Oscuro</h3>
+      <p>Fondo oscuro terracota profundo, acento dorado, logo en mayúsculas. Lujoso, como una floristería de autor.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function toggleSelect(el) {
+  const parent = el.closest('[data-multiselect]') || el.parentElement;
+  const isMulti = parent.hasAttribute('data-multiselect');
+
+  if (!isMulti) {
+    parent.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+  }
+  el.classList.toggle('selected');
+
+  // Record selection
+  const choice = el.dataset.choice;
+  const text = el.querySelector('h3')?.textContent || choice;
+  if (window.recordChoice) window.recordChoice(choice, text);
+
+  // Show indicator
+  const selected = parent.querySelectorAll('.card.selected');
+  const indicator = document.querySelector('.selected-indicator');
+  if (indicator) {
+    if (selected.length > 0) {
+      indicator.textContent = `Seleccionado: ${Array.from(selected).map(s => s.dataset.choice.toUpperCase()).join(', ')} — dime en el chat`;
+      indicator.classList.add('visible');
+    } else {
+      indicator.classList.remove('visible');
+    }
+  }
+}
+</script>
+
+<div class="selected-indicator"></div>

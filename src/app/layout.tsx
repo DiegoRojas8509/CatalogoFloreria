@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, Hanken_Grotesk } from "next/font/google";
 import { site } from "@/lib/config";
+import Cursor from "./components/Cursor";
 import "./globals.css";
 
 const display = Fraunces({
@@ -35,7 +36,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es-MX" className={`${display.variable} ${body.variable}`}>
-      <body>{children}</body>
+      <body>
+        <Cursor />
+        {children}
+      </body>
     </html>
   );
 }

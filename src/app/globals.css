@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --cream: #f6efd8;
-  --cream-light: #fbf8f0;
-  --olive: #3c4a2c;
-  --sage: #94a07e;
+  --cream: #f9edd3;
+  --cream-light: #fdf6ec;
+  --olive: #5c2e14;
+  --sage: #2d4a35;
 }
 
 @layer base {
@@ -21,8 +21,8 @@
     text-rendering: optimizeLegibility;
   }
   ::selection {
-    background: #94a07e;
-    color: #fbf8f0;
+    background: #5c2e14;
+    color: #fdf6ec;
   }
   h1, h2, h3, h4 {
     font-family: var(--font-display), Georgia, serif;
@@ -40,6 +40,57 @@
     font-size: 0.72rem;
     font-weight: 500;
   }
+  /* Estilo Mondine — etiqueta con guión "— Sección" */
+  .dash-label {
+    font-family: var(--font-body), sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 400;
+    opacity: 0.45;
+  }
+  /* Línea divisora editorial entre secciones */
+  .section-rule {
+    border: none;
+    border-top: 1px solid rgba(92, 46, 20, 0.12);
+    margin: 0;
+  }
+  /* Botón editorial: borde fino, cuadrado, uppercase */
+  .btn-editorial {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid rgba(92, 46, 20, 0.4);
+    padding: 0.875rem 2rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+    color: var(--olive);
+    background: transparent;
+  }
+  .btn-editorial:hover {
+    background: var(--olive);
+    color: var(--cream-light);
+    border-color: var(--olive);
+  }
+  .btn-editorial-solid {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 2rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: background 0.25s ease;
+    background: var(--olive);
+    color: var(--cream-light);
+    border: 1px solid var(--olive);
+  }
+  .btn-editorial-solid:hover {
+    background: #3D1D0A;
+    border-color: #3D1D0A;
+  }
   /* Textura sutil de papel para dar atmósfera (no plano) */
   .paper {
     background-color: var(--cream-light);
@@ -49,7 +100,7 @@
   }
 }
 
-/* Aparición al hacer scroll */
+/* Aparición al hacer scroll — fade + slide */
 .reveal {
   opacity: 0;
   transform: translateY(22px);
@@ -57,8 +108,115 @@
 .reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Variante clip-path wipe para títulos de sección */
+.reveal-clip {
+  clip-path: inset(0 0 100% 0);
+}
+.reveal-clip.is-visible {
+  clip-path: inset(0 0 0% 0);
+  transition: clip-path 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Wrapper para text-curtain (el overflow-hidden que enmascara el movimiento) */
+.curtain-wrap {
+  overflow: hidden;
+  display: block;
+}
+
+/* Cursor personalizado */
+.has-custom-cursor,
+.has-custom-cursor * {
+  cursor: none !important;
+}
+.cursor-dot {
+  position: fixed;
+  top: -4px;
+  left: -4px;
+  width: 8px;
+  height: 8px;
+  background: #5c2e14;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform;
+  transition: width 0.2s ease, height 0.2s ease, background 0.2s ease;
+}
+.cursor-ring {
+  position: fixed;
+  top: -20px;
+  left: -20px;
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid rgba(92, 46, 20, 0.3);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  will-change: transform;
+  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    height 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    top 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    left 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s ease,
+    background 0.35s ease;
+}
+.cursor-ring.is-hover {
+  width: 56px;
+  height: 56px;
+  top: -28px;
+  left: -28px;
+  border-color: rgba(92, 46, 20, 0.55);
+  background: rgba(92, 46, 20, 0.04);
+}
+.cursor-ring.is-link {
+  width: 72px;
+  height: 72px;
+  top: -36px;
+  left: -36px;
+  border-color: #5c2e14;
+  background: rgba(92, 46, 20, 0.07);
+}
+
+/* Entrada escalonada para items de grilla — usa --si como índice */
+.stagger-item {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: fade-up-item 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: calc(var(--si, 0) * 70ms + 100ms);
+}
+@keyframes fade-up-item {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Línea marcatexto terracota en títulos destacados */
+.highlight-underline {
+  position: relative;
+  display: inline-block;
+}
+.highlight-underline::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: -3px;
+  width: 100%; height: 2px;
+  background: #5c2e14;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.highlight-underline:hover::after {
+  transform: scaleX(1);
+}
+
+/* Sombra suave en cards al hover */
+.card-lift {
+  transition: box-shadow 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-lift:hover {
+  box-shadow: 0 12px 36px -8px rgba(92, 46, 20, 0.22);
+  transform: translateY(-3px);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -67,6 +225,10 @@
     transition: none !important;
   }
   .reveal {
+    opacity: 1;
+    transform: none;
+  }
+  .stagger-item {
     opacity: 1;
     transform: none;
   }

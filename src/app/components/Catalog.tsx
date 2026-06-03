@@ -5,7 +5,7 @@ import type { Arrangement, Category } from "@/lib/types";
 import { getArrangements, getCategories } from "@/lib/data";
 import ArrangementCard from "./ArrangementCard";
 import ArrangementModal from "./ArrangementModal";
-import Reveal from "./Reveal";
+import GSAPScrollTitle from "./GSAPScrollTitle";
 
 type GridConfig = {
   className: string;
@@ -124,21 +124,18 @@ export default function Catalog() {
     <>
       {/* Destacados */}
       {!loading && featured.length > 0 && (
-        <section id="destacados" className="paper px-5 py-20 sm:px-8 sm:py-24">
+        <section id="destacados" className="bg-cream-light px-5 py-20 sm:px-8 sm:py-28">
           <div className="mx-auto max-w-6xl">
-            <Reveal>
-              <p className="eyebrow text-center text-sage-dark">Selección de la casa</p>
-              <h2 className="mt-3 text-center font-display text-4xl text-olive sm:text-5xl">
-                Arreglos destacados
-              </h2>
-            </Reveal>
+            <GSAPScrollTitle label="— Selección de la casa">
+              Destacados
+            </GSAPScrollTitle>
             <div className="mt-12 flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              {featured.map((a) => (
+              {featured.map((a, idx) => (
                 <div
                   key={a._id}
                   className="w-[calc(25%-0.9375rem)] min-w-[220px] shrink-0 snap-start"
                 >
-                  <ArrangementCard arrangement={a} onOpen={openArrangement} />
+                  <ArrangementCard arrangement={a} onOpen={openArrangement} index={idx} />
                 </div>
               ))}
             </div>
@@ -147,14 +144,12 @@ export default function Catalog() {
       )}
 
       {/* Catálogo completo + búsqueda + filtros */}
-      <section id="catalogo" className="bg-cream px-5 py-20 sm:px-8 sm:py-24">
+      <section id="catalogo" className="bg-cream px-5 py-20 sm:px-8 sm:py-28">
         <div className="mx-auto max-w-6xl">
-          <Reveal>
-            <p className="eyebrow text-center text-sage-dark">Nuestro catálogo</p>
-            <h2 className="mt-3 text-center font-display text-4xl text-olive sm:text-5xl">
-              Explora todos los arreglos
-            </h2>
-          </Reveal>
+          <hr className="section-rule mb-20" />
+          <GSAPScrollTitle label="— Nuestro catálogo">
+            Todos los arreglos
+          </GSAPScrollTitle>
 
           {/* Buscador */}
           <div className="mx-auto mt-10 max-w-md">
@@ -210,9 +205,9 @@ export default function Catalog() {
                 const cfg = buildGridConfig(filtered.length, isMobile);
                 return (
                   <div className={cfg.className} style={cfg.style}>
-                    {filtered.map((a) => (
+                    {filtered.map((a, idx) => (
                       <div key={a._id} className={cfg.itemClass}>
-                        <ArrangementCard arrangement={a} onOpen={openArrangement} />
+                        <ArrangementCard arrangement={a} onOpen={openArrangement} index={idx} />
                       </div>
                     ))}
                   </div>
@@ -239,10 +234,10 @@ function FilterPill({
   return (
     <button
       onClick={onClick}
-      className={`rounded-full px-5 py-2 text-sm transition ${
+      className={`rounded-full px-5 py-2 text-sm font-medium transition-all duration-200 ${
         active
-          ? "bg-olive text-cream-light"
-          : "border border-sage/40 text-olive/70 hover:border-sage hover:text-olive"
+          ? "bg-olive text-cream-light scale-[1.03] shadow-sm shadow-olive/20"
+          : "border border-sage/40 text-olive/70 hover:border-sage hover:text-olive hover:scale-[1.02]"
       }`}
     >
       {label}
@@ -253,11 +248,11 @@ function FilterPill({
 function SkeletonGrid() {
   return (
     <div className="grid grid-cols-2 gap-5 sm:grid-cols-4">
-      {Array.from({ length: 4 }).map((_, i) => (
-        <div key={i} className="animate-pulse">
-          <div className="aspect-[4/5] w-full rounded-xl bg-cream-deep" />
-          <div className="mt-3 h-4 w-2/3 rounded bg-cream-deep" />
-          <div className="mt-2 h-3 w-1/3 rounded bg-cream-deep" />
+      {Array.from({ length: 8 }).map((_, i) => (
+        <div key={i} className="animate-pulse" style={{ animationDelay: `${i * 80}ms` }}>
+          <div className="aspect-[4/5] w-full rounded-xl2 bg-cream-deep" />
+          <div className="mt-3.5 h-4 w-3/4 rounded-full bg-cream-deep" />
+          <div className="mt-2 h-3 w-1/3 rounded-full bg-cream-deep" />
         </div>
       ))}
     </div>

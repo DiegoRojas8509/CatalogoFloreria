@@ -14,7 +14,7 @@ export default function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => setScrolled(window.scrollY > 32);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -22,26 +22,29 @@ export default function SiteHeader() {
 
   return (
     <header
-      className={`sticky top-0 z-40 transition-colors duration-300 ${
+      className={`sticky top-0 z-40 transition-all duration-400 ${
         scrolled
-          ? "border-b border-sage/20 bg-cream-light/90 backdrop-blur"
+          ? "border-b border-olive/10 bg-cream-light/92 backdrop-blur-md"
           : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
-        <a href="#top" className="leading-none">
-          <span className="block font-display text-2xl tracking-tight text-olive">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 sm:px-10">
+
+        {/* Logo */}
+        <a href="#top" className="group leading-none">
+          <span className="block font-display text-xl tracking-tight text-olive transition-opacity group-hover:opacity-70">
             {site.name}
           </span>
-          <span className="eyebrow text-[0.58rem] text-sage-dark">Florería</span>
+          <span className="dash-label text-[0.6rem] text-olive">Florería</span>
         </a>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        {/* Nav escritorio */}
+        <nav className="hidden items-center gap-10 md:flex">
           {links.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              className="text-sm text-olive/70 transition hover:text-olive"
+              className="text-xs uppercase tracking-[0.15em] text-olive/50 transition hover:text-olive"
             >
               {l.label}
             </a>
@@ -50,17 +53,18 @@ export default function SiteHeader() {
             href={whatsappLink()}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full bg-olive px-5 py-2 text-sm text-cream-light transition hover:bg-olive-dark"
+            className="btn-editorial text-xs"
           >
             WhatsApp
           </a>
         </nav>
 
+        {/* Botón mobile */}
         <a
           href="#catalogo"
-          className="rounded-full bg-olive px-4 py-2 text-sm text-cream-light md:hidden"
+          className="text-xs uppercase tracking-[0.15em] text-olive/60 transition hover:text-olive md:hidden"
         >
-          Ver catálogo
+          Catálogo
         </a>
       </div>
     </header>

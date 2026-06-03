@@ -1,5 +1,5 @@
 import SiteHeader from "./components/SiteHeader";
-import Hero from "./components/Hero";
+import GSAPHero from "./components/GSAPHero";
 import Catalog from "./components/Catalog";
 import About from "./components/About";
 import Contact from "./components/Contact";
@@ -11,7 +11,7 @@ export default function Home() {
     <>
       <SiteHeader />
       <main>
-        <Hero />
+        <GSAPHero />
         <Catalog />
         <About />
         <Contact />
